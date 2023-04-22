@@ -13,12 +13,14 @@ import tensorflow_transform as tft
 import keras_tuner as kt
 from keras import layers
 from keras_tuner.engine import base_tuner
+
 from smart_grid_transform import (
     CATEGORICAL_FEATURES,
     LABEL_KEY,
     NUMERICAL_FEATURES,
     transformed_name,
 )
+
 
 TunerFnResult = NamedTuple('TunerFnResult', [
     ('tuner', base_tuner.BaseTuner),
@@ -108,7 +110,7 @@ def get_tuner_model(hyperparameters, show_summary=True):
 
     for key, dim in CATEGORICAL_FEATURES.items():
         input_features.append(
-            layers.Input(shape=(dim+1,), name=transformed_name(key))
+            layers.Input(shape=(dim + 1,), name=transformed_name(key))
         )
 
     for feature in NUMERICAL_FEATURES:

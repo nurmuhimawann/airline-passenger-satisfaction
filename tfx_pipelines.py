@@ -17,23 +17,22 @@ This dataset corresponds to an augmented version of the [**Electrical Grid Stabi
 ### **Kaggle Environment Variables**
 """
 
-
 """## **Library**"""
 
 # import library
+
+"""## **Set Pipeline Variable**"""
+
+# pipeline name
 import os
 import sys
 import pandas as pd
 from typing import Text
 from absl import logging
-# from modules import components
 from tfx.orchestration import metadata, pipeline
 from tfx.orchestration.beam.beam_dag_runner import BeamDagRunner
-
-"""## **Set Pipeline Variable**"""
-
-# pipeline name
 PIPELINE_NAME = "smart-grid-pipeline"
+
 
 # pipeline inputs
 DATA_ROOT = "data"
@@ -110,6 +109,7 @@ df.head()
 
 """## **ML Pipelines**"""
 
+
 def init_local_pipeline(
     components, pipeline_root: Text
 ) -> pipeline.Pipeline:
@@ -139,15 +139,15 @@ if __name__ == "__main__":
 
     from modules.components import init_components
 
-    components = components.init_components({
-        'data_dir': DATA_ROOT,
-        'transform_module': TRANSFORM_MODULE_FILE,
-        'tuner_module': TUNER_MODULE_FILE,
-        'training_module': TRAINER_MODULE_FILE,
-        'training_steps': 5000,
-        'eval_steps': 1000,
-        'serving_model_dir': serving_model_dir
-    })
+    components = init_components(
+        DATA_ROOT,
+        transform_module=TRANSFORM_MODULE_FILE,
+        tuner_module=TUNER_MODULE_FILE,
+        training_module=TRAINER_MODULE_FILE,
+        training_steps=5000,
+        eval_steps=1000,
+        serving_model_dir=serving_model_dir,
+    )
 
     pipeline = init_local_pipeline(components, pipeline_root)
     BeamDagRunner().run(pipeline=pipeline)

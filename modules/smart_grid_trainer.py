@@ -7,12 +7,11 @@ Usage:
 """
 
 import os
-
 import tensorflow as tf
 from keras.utils.vis_utils import plot_model
 import tensorflow_transform as tft
 
-from customer_churn_transform import (
+from smart_grid_transform import (
     CATEGORICAL_FEATURES,
     LABEL_KEY,
     NUMERICAL_FEATURES,

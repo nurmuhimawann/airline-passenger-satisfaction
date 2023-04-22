@@ -37,6 +37,7 @@ def convert_num_to_one_hot(label_tensor, num_labels=2):
     one_hot_tensor = tf.one_hot(label_tensor, num_labels)
     return tf.reshape(one_hot_tensor, [-1, num_labels])
 
+
 def replace_nan(tensor):
     """Replace nan value with zero number
     Args:
@@ -50,6 +51,7 @@ def replace_nan(tensor):
         tft.mean(tensor),
         tensor
     )
+
 
 def preprocessing_fn(inputs):
     """
