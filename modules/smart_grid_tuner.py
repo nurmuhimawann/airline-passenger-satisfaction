@@ -21,7 +21,6 @@ from smart_grid_transform import (
     transformed_name,
 )
 
-
 TunerFnResult = NamedTuple('TunerFnResult', [
     ('tuner', base_tuner.BaseTuner),
     ('fit_kwargs', Dict[Text, Any]),
@@ -155,7 +154,7 @@ def tuner_fn(fn_args):
     tuner = kt.Hyperband(
         hypermodel=get_tuner_model,
         objective=kt.Objective('val_loss', direction='min'),
-        max_epochs=10,
+        max_epochs=1,
         factor=3,
         directory=fn_args.working_dir,
         project_name='kt_hyperband_smart_grid'

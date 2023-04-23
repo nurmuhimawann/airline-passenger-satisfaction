@@ -27,15 +27,7 @@ from tfx.dsl.input_resolution.strategies.latest_blessed_model_strategy import (
     LatestBlessedModelStrategy)
 
 
-def init_components(
-    data_dir,
-    transform_module,
-    tuner_module,
-    training_module,
-    training_steps,
-    eval_steps,
-    serving_model_dir,
-):
+def init_components(args):
     """Initiate tfx pipeline components
 
     Args:
@@ -59,7 +51,7 @@ def init_components(
     )
 
     example_gen = CsvExampleGen(
-        input_base=data_dir,
+        input_base=args['data_dir'],
         output_config=output
     )
 
@@ -79,33 +71,37 @@ def init_components(
     transform = Transform(
         examples=example_gen.outputs['examples'],
         schema=schema_gen.outputs['schema'],
-        module_file=os.path.abspath(transform_module)
+        module_file=os.path.abspath(args['transform_module'])
     )
 
     tuner = Tuner(
-        module_file=os.path.abspath(tuner_module),
+        module_file=os.path.abspath(args['tuner_module']),
         examples=transform.outputs['transformed_examples'],
         transform_graph=transform.outputs['transform_graph'],
         schema=schema_gen.outputs['schema'],
         train_args=trainer_pb2.TrainArgs(
             splits=['train'],
-            num_steps=training_steps),
+            num_steps=args['training_steps']
+        ),
         eval_args=trainer_pb2.EvalArgs(
             splits=['eval'],
-            num_steps=eval_steps)
+            num_steps=args['eval_steps']
+        )
     )
 
     trainer = Trainer(
-        module_file=os.path.abspath(training_module),
+        module_file=os.path.abspath(args['training_module']),
         examples=transform.outputs['transformed_examples'],
         transform_graph=transform.outputs['transform_graph'],
         schema=schema_gen.outputs['schema'],
         train_args=trainer_pb2.TrainArgs(
             splits=['train'],
-            num_steps=training_steps),
+            num_steps=args['training_steps']
+        ),
         eval_args=trainer_pb2.EvalArgs(
             splits=['eval'],
-            num_steps=eval_steps)
+            num_steps=args['eval_steps']
+        )
     )
 
     model_resolver = Resolver(
@@ -129,13 +125,19 @@ def init_components(
             tfma.MetricConfig(class_name="Precision"),
             tfma.MetricConfig(class_name="Recall"),
             tfma.MetricConfig(class_name="ExampleCount"),
+            tfma.MetricConfig(class_name='TruePositives'),
+            tfma.MetricConfig(class_name='FalsePositives'),
+            tfma.MetricConfig(class_name='TrueNegatives'),
+            tfma.MetricConfig(class_name='FalseNegatives'),
             tfma.MetricConfig(class_name='BinaryAccuracy',
                               threshold=tfma.MetricThreshold(
                                   value_threshold=tfma.GenericValueThreshold(
-                                      lower_bound={'value': 0.5}),
+                                      lower_bound={'value': 0.5}
+                                  ),
                                   change_threshold=tfma.GenericChangeThreshold(
                                       direction=tfma.MetricDirection.HIGHER_IS_BETTER,
-                                      absolute={'value': 0.0001})
+                                      absolute={'value': 0.0001}
+                                  )
                               )
                               )
         ])
@@ -158,7 +160,7 @@ def init_components(
         model_blessing=evaluator.outputs["blessing"],
         push_destination=pusher_pb2.PushDestination(
             filesystem=pusher_pb2.PushDestination.Filesystem(
-                base_directory=serving_model_dir
+                base_directory=args['serving_model_dir']
             )
         ),
     )
