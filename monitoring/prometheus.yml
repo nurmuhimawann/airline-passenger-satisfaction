@@ -10,4 +10,4 @@ scrape_configs:
     scrape_interval: 5s
     metrics_path: /monitoring/prometheus/metrics
     static_configs:
-      - targets: ['mlops-productions.up.railway.app']
+      - targets: ['airline-passenger-satisfaction.up.railway.app']
