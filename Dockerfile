@@ -1,10 +1,10 @@
 FROM tensorflow/serving:latest
 
-COPY ./output/serving_model /models/smart-grid-stability-model
+COPY ./outputs/serving_model /models/airline-passenger-satisfaction-model
 COPY ./config /model_config
 
-ENV MODEL_NAME=smart-grid-stability-model
-ENV MONITORING_CONFIG="/model_config/prometheus.config"
+ENV MODEL_NAME=airline-passenger-satisfaction-model
+ENV MONITORING_CONFIG='/model_config/prometheus.config'
 ENV PORT=8501
 
 RUN echo '#!/bin/bash \n\n\
