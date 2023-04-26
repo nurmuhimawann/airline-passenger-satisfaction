@@ -9,7 +9,6 @@ Usage:
 import tensorflow as tf
 import tensorflow_transform as tft
 
-
 CATEGORICAL_FEATURES = {
     'gender': 2,
     'customer_type': 2,

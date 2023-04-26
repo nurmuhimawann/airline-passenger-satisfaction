@@ -112,7 +112,7 @@ def get_tuner_model(hyperparameters, show_summary=True):
 
     for key, dim in CATEGORICAL_FEATURES.items():
         input_features.append(
-            layers.Input(shape=(dim+1,), name=transformed_name(key))
+            layers.Input(shape=(dim + 1,), name=transformed_name(key))
         )
 
     for feature in NUMERICAL_FEATURES:

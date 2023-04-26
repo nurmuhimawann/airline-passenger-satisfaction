@@ -8,9 +8,8 @@
 ### **Dataset Summary**
 
 This dataset contains an [US Airline Passenger Satisfaction Survey](https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction).
-
-### **Kaggle Environment Variables**
 """
+
 
 """## **Library**"""
 
@@ -29,6 +28,10 @@ from tfx.orchestration.beam.beam_dag_runner import BeamDagRunner
 pd.reset_option('^display.', silent=True)
 
 DATA_PATH = 'data'
+
+# let's see dataframe
+df = pd.read_csv(os.path.join(DATA_PATH, 'airline_passenger_satisfaction.csv'))
+df.head()
 
 """**DESCRIPTION OF DATA**
 
@@ -59,9 +62,6 @@ There is the following information about the passengers of some airline:
 *   ***Satisfaction***: Airline satisfaction level(Satisfaction, neutral or dissatisfaction)
 """
 
-# let's see dataframe
-df = pd.read_csv(os.path.join(DATA_PATH, 'airline_passenger_satisfaction.csv'))
-df.head()
 
 """## **Set Pipeline Variable**"""
 
@@ -80,6 +80,7 @@ OUTPUT_BASE = 'outputs'
 serving_model_dir = os.path.join(OUTPUT_BASE, 'serving_model')
 pipeline_root = os.path.join(OUTPUT_BASE, PIPELINE_NAME)
 metadata_path = os.path.join(pipeline_root, 'metadata.sqlite')
+
 
 """## **ML Pipelines (Pipeline Orchestrator)**"""
 
@@ -114,6 +115,7 @@ def init_local_pipeline(
         ),
         eam_pipeline_args=beam_args
     )
+
 
 # running pipelines
 if __name__ == "__main__":
